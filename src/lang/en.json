@@ -34,6 +34,7 @@
   "辅助功能": "Auxiliary Config",
   "全局设置": "Global Setting",
   "添加组件": "Add Component",
+  "下载壁纸": "Download Wallpaper",
   "editStatueWarningText": "In edit status will show outline border, then you can drag to change position or right click to show menu setting",
 
   "刷新壁纸": "Refresh Wallpaper",
@@ -46,10 +47,12 @@
   "网站标题": "Site Title",
   "自定义网站的标题": "Site Tilte",
   "禁用动画": "Disbale Animation",
+  "菜单按钮": "Menu Button",
   "全局CSS注入": "Inject CSS",
   "全局JS注入": "Inject Javascript",
   "siteTitleTips": "Customize the title of the site, refresh the page is still effective",
   "disabledDialogAnimationTips": "On some low performance machines, you can disable popover animations to optimize performance",
+  "showMenuBtnTips": "Visible of right-bottom menu button",
   "injectCSSPlaceholder": "Please enter a valid CSS code that will be inserted into the page to override the default style",
   "injectJSPlaceholder": "Injecting JavaScript code into web pages is not recommended unless necessary, chrome extension mode is deny to inject js code",
 
@@ -370,5 +373,7 @@
 
   "雨滴特效实现失败, 请确保壁纸地址允许跨域": "Rain drop effect build error, It need wallpaper url allow CORS",
   "bgEffectSelectorTips": "It based on WebGL, maybe happen error in some Low-end models or browser, need reload page after setting",
-  "exportExpireTips": "Export key expire after 7 days"
+  "exportExpireTips": "Export key expire after 7 days",
+
+  "动画滤镜": "Animate Filter"
 }

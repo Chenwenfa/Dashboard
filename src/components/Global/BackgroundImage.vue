@@ -8,6 +8,7 @@
     <div v-if="videoURL" :class="['bg-media-wrapper', showBackgroundEffect && 'system-bg-effect']">
       <video
         class="bg-video"
+        crossorigin="anonymous"
         :src="videoURL"
         autoplay
         muted
@@ -36,22 +37,25 @@
         />
       </div>
       <div class="icon-wrapper">
-        <Icon
-          v-if="showRefreshBtn && (backgroundURL.includes('randomPhoto') || backgroundURL.includes('localImg'))"
-          name="refresh"
-          class="btn-refresh"
-          :title="$t('刷新背景图')"
-          size="20"
-          @click="refresh"
-        />
-        <Icon
-          v-if="showRefreshBtn && backgroundURL.includes('randomPhoto')"
-          :name="hasLike ? 'heart-fill': 'heart'"
-          :class="['btn-heart', hasLike && 'active']"
-          :title="$t('喜欢')"
-          size="22"
-          @click="like"
-        />
+        <div class="icon-item" :title="$t('刷新壁纸')">
+          <Icon
+            v-if="showRefreshBtn && (backgroundURL.includes('randomPhoto') || backgroundURL.includes('localImg'))"
+            name="refresh"
+            class="btn-refresh"
+            size="20"
+            @click="refresh"
+          />
+        </div>
+        <div class="icon-item" :title="$t('喜欢')">
+          <Icon
+            v-if="showRefreshBtn && backgroundURL.includes('randomPhoto')"
+            :name="hasLike ? 'heart-fill': 'heart'"
+            :class="['btn-heart', hasLike && 'active']"
+            :title="$t('喜欢')"
+            size="22"
+            @click="like"
+          />
+        </div>
       </div>
     </div>
   </div>
@@ -178,11 +182,14 @@ watch(
 const videoURL = computed(() => {
   if (props.background && props.background.includes('url')) {
     const url = getURL(props.background)
-    const fileType = getFileType(url)
-    if (
-      fileType &&
-      ['mp4', 'avi', 'wmv', 'mpg', 'mpeg', 'mov', 'ts', 'flv', 'webm'].includes(fileType)
-    ) {
+    // const fileType = getFileType(url)
+    // if (
+    //   fileType &&
+    //   ['mp4', 'avi', 'wmv', 'mpg', 'mpeg', 'mov', 'ts', 'flv', 'webm'].includes(fileType)
+    // ) {
+    //   return url
+    // }
+    if (['.mp4', '.webm', '.flv', '.avi'].some(item => url.includes(item))) {
       return url
     }
   }
@@ -339,32 +346,27 @@ defineExpose({
 }
 .icon-wrapper {
   position: absolute;
-  left: 16px;
-  bottom: 16px;
+  left: 12px;
+  bottom: 12px;
   display: flex;
   align-items: center;
   font-size: 20px;
   z-index: 20;
-  .btn-refresh {
+  .icon-item {
+    padding: 6px;
+    border-radius: 4px;
     color: $color-white;
     cursor: pointer;
-    margin-right: 16px;
-    &:hover {
-      color: $color-grey5;
-    }
-  }
-
-  .btn-heart {
-    color: $color-white;
-    cursor: pointer;
-    &:hover {
-      color: $color-grey5;
-    }
-    &.active {
-      color: $color-danger;
-      &:hover {
+    display: flex;
+    align-items: center;
+    margin: 0 4px;
+    .btn-heart {
+      &.active {
         color: $color-danger;
       }
+    }
+    &:hover {
+      background: rgba(0,0,0,0.08);
     }
   }
 }
