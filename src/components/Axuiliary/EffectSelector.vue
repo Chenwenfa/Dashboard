@@ -56,6 +56,11 @@ const effectList = ref([
     img: 'https://cdn.kongfandong.cn/img/animate-effect/Star.gif',
     name: '星空',
     value: 3
+  },
+  {
+    img: 'https://cdn.kongfandong.cn/img/animate-effect/Star.gif',
+    name: '樱花',
+    value: 4
   }
 ])
 
