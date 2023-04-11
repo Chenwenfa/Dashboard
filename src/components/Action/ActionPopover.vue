@@ -65,6 +65,18 @@ const rectInfo = ref({
   top: 0,
   left: 0
 })
+
+let timer: number | null = null
+const resetPosition = () => {
+  if (timer) clearTimeout(timer as number)
+  timer = setTimeout(() => {
+    const newTop = (window.innerHeight - rectInfo.value.height) / 2
+    const newLeft = (window.innerWidth - rectInfo.value.width) / 2
+    rectInfo.value.top = newTop
+    rectInfo.value.left = newLeft
+  }, 200)
+}
+
 const open = async (component: ComponentOptions, element: HTMLElement) => {
   setTimeout(() => {
     if (!component.actionSetting) return
@@ -85,10 +97,16 @@ const open = async (component: ComponentOptions, element: HTMLElement) => {
       transformOriginStr.value = `${fromX - endX}px ${fromY - endY}px`
       visible.value = true
       isCenterDirection.value = direction === 0
+      if (isCenterDirection.value) {
+        window.addEventListener('resize', resetPosition, true)
+      }
     }
   })
 }
 const close = () => {
+  if (isCenterDirection.value) {
+    window.removeEventListener('resize', resetPosition, true)
+  }
   visible.value = false
   isCenterDirection.value = false
 }
@@ -150,16 +168,18 @@ defineExpose({
   width: 36px;
   height: 36px;
   font-size: 22px;
-  color: #929499;
+  color: #f4f4f4;
   position: absolute;
   top: 0;
-  right: 0;
+  right: -40px;
   cursor: pointer;
-  transition: transform .3s ease-in-out;
+  border-radius: 4px;
+  filter: drop-shadow(0 0 1px #262626);
   z-index: 999;
+  // transition: transform .3s ease-in-out;
   &:hover {
-    color: #a2a4a9;
-    transform: rotate(-90deg);
+    background: rgba(255,255,255,0.1);
+    // transform: rotate(-90deg);
   }
 }
 </style>
