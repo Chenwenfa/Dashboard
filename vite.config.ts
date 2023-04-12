@@ -52,8 +52,13 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      '/baidu-api': {
+        target: 'https://suggestion.baidu.com/',
+        changeOrigin: true,
+        rewrite: (path: string) => path.replace(/^\/baidu-api/, '')
+      },
       '/api': {
-        target: 'http://kongfandong.cn',
+        target: 'https://kongfandong.cn',
         changeOrigin: true,
         rewrite: (path: string) => path.replace(/^\/api/, '')
       }

@@ -139,9 +139,10 @@
 <script lang="ts">
 import { computed, defineComponent, nextTick, onMounted, onUnmounted, ref } from 'vue'
 import { useStore } from '@/store'
-import { apiURL } from '@/global'
+// import { apiURL } from '@/global'
 import { mapPosition } from '@/plugins/position-selector'
 import { getTargetIcon } from '@/utils/images'
+import jsonp from 'jsonp'
 export default defineComponent({
   name: 'Search',
   props: {
@@ -168,6 +169,12 @@ export default defineComponent({
     const linkSearchArrActive = ref(-1)
     const showTabTips = ref(false)
     const searchInput = ref()
+
+    !window?.baidu && (window.baidu = {})
+    window.baidu.sug = function(data) {
+      showTabTips.value = false
+      if (searchKey.value) linkSearchArr.value = data.s
+    }
 
     const activeEngineItem = computed(() => {
       return (
@@ -310,14 +317,21 @@ export default defineComponent({
       }
       if (!props.componentSetting.keywordLink) return
       try {
-        const res = await fetch(`${apiURL}/getAutomatedKeywords?s=${searchKey.value}`)
-        const { errCode, data } = await res.json()
-        if (errCode === 200) {
-          showTabTips.value = false
-          if (searchKey.value) linkSearchArr.value = data
-        } else {
-          throw new Error('403')
-        }
+        jsonp(`/baidu-api/su?wd=${searchKey.value}`, null, (err, data) => {
+          if (err) {
+            console.log('baidu-api', err)
+          } else {
+            console.log('baidu-api', data)
+          }
+        })
+        // const res = await fetch(`${apiURL}/getAutomatedKeywords?s=${searchKey.value}`)
+        // const { errCode, data } = await res.json()
+        // if (errCode === 200) {
+        //   showTabTips.value = false
+        //   if (searchKey.value) linkSearchArr.value = data
+        // } else {
+        //   throw new Error('403')
+        // }
       } catch (e) {
         linkSearchArr.value = []
         linkSearchArrActive.value = -1
@@ -376,6 +390,7 @@ export default defineComponent({
     onMounted(() => {
       showTabTips.value = props.element.showTabTips
       document.addEventListener('click', clickEngineWrapperOutside)
+      searchInput.value.focus()
     })
     onUnmounted(() => {
       document.removeEventListener('click', clickEngineWrapperOutside)
