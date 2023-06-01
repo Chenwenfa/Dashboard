@@ -4,7 +4,8 @@
     :style="{
       fontSize: componentSetting.textFontSize + 'px',
       color: componentSetting.textColor,
-      padding: componentSetting.padding + 'px'
+      padding: componentSetting.padding + 'px',
+      fontFamily: componentSetting.fontFamily,
     }"
   >
     <div
@@ -38,27 +39,17 @@
                   :style="{ fontSize: iconSize, color: element.iconPath }"
                   class="no-icon"
                 >
-                  {{ element.title.slice(0, 1) }}
+                  {{ element.iconText || element.title.slice(0, 1) }}
                 </div>
               </template>
               <svg
                 v-else
-                viewBox="0 0 1124 1024"
+                viewBox="0 0 1024 1024"
                 :width="(iconSize || '32').replace('px', '')"
                 :height="(iconSize || '32').replace('px', '')"
               >
-                <path
-                  d="M948.079775 106.337352H460.223099S394.153465 1.788394 355.688563 1.788394H181.435493a69.68969 69.68969 0 0 0-69.68969 69.704113v801.474704a69.718535 69.718535 0 0 0 69.68969 69.68969h766.629859a69.718535 69.718535 0 0 0 69.68969-69.68969V176.027042a69.718535 69.718535 0 0 0-69.68969-69.68969z"
-                  fill="#D0994B"
-                ></path>
-                <path
-                  d="M111.745803 210.871887h906.023662v278.787606H111.745803z"
-                  fill="#E4E7E7"
-                ></path>
-                <path
-                  d="M76.900958 280.561577h975.713352a69.68969 69.68969 0 0 1 69.704113 69.704113L1052.628732 942.656901a69.718535 69.718535 0 0 1-69.704112 69.689691H146.60507a69.718535 69.718535 0 0 1-69.704112-69.689691L7.211268 350.26569a69.68969 69.68969 0 0 1 69.68969-69.704113z"
-                  fill="#F4B459"
-                ></path>
+                  <path d="M853.333333 256H469.333333l-85.333333-85.333333H170.666667c-46.933333 0-85.333333 38.4-85.333334 85.333333v170.666667h853.333334v-85.333334c0-46.933333-38.4-85.333333-85.333334-85.333333z" fill="#FFA000"></path>
+                  <path d="M853.333333 256H170.666667c-46.933333 0-85.333333 38.4-85.333334 85.333333v426.666667c0 46.933333 38.4 85.333333 85.333334 85.333333h682.666666c46.933333 0 85.333333-38.4 85.333334-85.333333V341.333333c0-46.933333-38.4-85.333333-85.333334-85.333333z" fill="#FFCA28"></path>
               </svg>
             </div>
             <div class="tile-title">{{ element.title }}</div>
@@ -140,7 +131,7 @@
                     :style="{ fontSize: iconSize, color: element.iconPath }"
                     class="no-icon"
                   >
-                    {{ element.title.slice(0, 1) }}
+                    {{ element.iconText || element.title.slice(0, 1) }}
                   </div>
                 </template>
               </div>
@@ -225,6 +216,7 @@ import MouseMenuDirective from '@/plugins/mouse-menu'
 import { ElNotification } from 'element-plus'
 import { uid } from '@/utils'
 import { useI18n } from 'vue-i18n'
+import type { MenuSetting } from '@howdyjs/mouse-menu/dist/types'
 const props = defineProps({
   componentSetting: {
     type: Object,
@@ -280,35 +272,35 @@ const list = computed({
   }
 })
 
-const menuList = ref([
+const menuList = ref<MenuSetting[]>([
   {
     label: () => t('添加'),
-    icon: h(Icon, { name: 'add', size: 18 }),
+    icon: h(Icon, { name: 'add', size: 18 }) as any,
     fn: (params: any) => {
       handleAddNewBookmark(params.parent)
     }
   },
   {
     label: () => t('编辑'),
+    icon: h(Icon, { name: 'lock', size: 18 }) as any,
     fn: (params: any) => {
       handleEdit(params.element, params.parent)
-    },
-    icon: h(Icon, { name: 'lock', size: 18 })
+    }
   },
   {
     label: () => t('移动'),
+    icon: h(Icon, { name: 'send-plane', size: 18 }) as any,
     fn: (params: any) => {
       handleMove([params.element], false, params.parent)
     },
-    hidden: (params: any) => params.element.type === 'folder',
-    icon: h(Icon, { name: 'send-plane', size: 18 })
+    hidden: (params: any) => params.element.type === 'folder'
   },
   {
     label: () => t('删除'),
+    icon: h(Icon, { name: 'delete', size: 18 }) as any,
     fn: (params: any) => {
       handleMove([params.element], true, params.parent)
     },
-    icon: h(Icon, { name: 'delete', size: 18 }),
     customClass: 'delete'
   },
   {
@@ -316,7 +308,7 @@ const menuList = ref([
   },
   {
     label: () => t('批量操作'),
-    icon: h(Icon, { name: 'checkbox-multiple', size: 18 }),
+    icon: h(Icon, { name: 'checkbox-multiple', size: 18 }) as any,
     fn: (params: any) => {
       setBatch(params.parent)
     }
@@ -618,6 +610,7 @@ onUnmounted(() => document.removeEventListener('contextmenu', preventMouseMenu))
       justify-content: center;
       background: rgba(241, 243, 244, 1);
       margin: 4px 0;
+      overflow: hidden;
       img {
         width: v-bind('iconSize');
         height: v-bind('iconSize');
