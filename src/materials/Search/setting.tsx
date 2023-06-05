@@ -3,6 +3,12 @@ export default {
   formData: {
     engineList: [
       {
+        name: '百度',
+        link: 'https://www.baidu.com/s?wd=',
+        iconType: 'local',
+        iconPath: 'https://cdn.kongfandong.cn/img/search-icons/baidu.svg'
+      },
+      {
         name: 'Bing-CN',
         link: 'https://cn.bing.com/search?q=',
         iconType: 'local',
@@ -13,12 +19,6 @@ export default {
         link: 'https://www.google.com/search?q=',
         iconType: 'local',
         iconPath: 'https://cdn.kongfandong.cn/img/search-icons/google.svg'
-      },
-      {
-        name: '百度',
-        link: 'https://www.baidu.com/s?wd=',
-        iconType: 'local',
-        iconPath: 'https://cdn.kongfandong.cn/img/search-icons/baidu.svg'
       },
       {
         name: '有道词典',

@@ -3,13 +3,7 @@
     <div class="item">
       <p class="title">{{$t('项目说明')}}</p>
       <ul class="list">
-        <li>项目提供<code>网页在线版</code>、<code>浏览器插件</code>、<code>桌面应用</code>等访问方式，具体参考<a :href="INTRODUCTION" target="_blank">中文文档</a></li>
-        <li>项目基于
-          <a :href="MIT" target="_blank">MIT</a> 协议开源 &copy; <a :href="AUTHOR_BLOG" target="_blank">Leon.D</a>，源码地址访问此处
-          <a :href="GITHUB" target="_blank">Github</a>
-        </li>
-        <li>项目基于<code>Vite</code>、<code>Vue3</code>、<code>Typescript</code>，欢迎各种PR贡献你的想法</li>
-        <li>若对此项目有想法、建议或问题都可在Github的 <a :href="ISSUE" target="_blank">Issue</a> 上留言</li>
+        <li>项目提供<code>网页在线版</code>具体参考<a :href="INTRODUCTION" target="_blank">中文文档</a></li>
         <li v-if="isWebify">Powered by <a href="https://webify.cloudbase.net/" target="_blank" rel="noopener noreferrer">CloudBase Webify</a></li>
       </ul>
     </div>

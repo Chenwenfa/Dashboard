@@ -50,6 +50,12 @@
       "componentSetting": {
         "engineList": [
           {
+            "name": "百度",
+            "link": "https://www.baidu.com/s?wd=",
+            "iconType": "local",
+            "iconPath": "https://kongfandong.cn/images/icons/baidu.svg"
+          },
+          {
             "name": "Bing-CN",
             "link": "https://cn.bing.com/search?q=",
             "iconType": "local",
@@ -60,12 +66,6 @@
             "link": "https://www.google.com/search?q=",
             "iconType": "local",
             "iconPath": "https://kongfandong.cn/images/icons/google.svg"
-          },
-          {
-            "name": "百度",
-            "link": "https://www.baidu.com/s?wd=",
-            "iconType": "local",
-            "iconPath": "https://kongfandong.cn/images/icons/baidu.svg"
           },
           {
             "name": "有道词典",

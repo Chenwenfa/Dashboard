@@ -179,7 +179,7 @@ export default defineComponent({
 
     const submit = () => {
       store.updateGlobal(state.formData)
-      document.title = state.formData.siteTitle || 'Howdz 起始页'
+      document.title = state.formData.siteTitle || '兰亭序'
       close()
     }
 
