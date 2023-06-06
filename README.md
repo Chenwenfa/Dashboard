@@ -7,7 +7,6 @@
 
 ## Document
 
-- [中文](https://kongfandong.cn/howdz/)
 - [English](./README.en.md)
 
 ## Website
