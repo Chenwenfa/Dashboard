@@ -481,7 +481,7 @@
     }
   ],
   "global": {
-    "background": "#242428 url(https://kongfandong.cn/api/randomPhoto/bing?duration=0) center center / cover",
+    "background": "#242428 url(http://139.199.175.149/kf_api/api/randomPhoto/bing?duration=0) center center / cover",
     "backgroundFilter": "brightness(0.65)",
     "lang": "zh-cn",
     "gutter": 10,
