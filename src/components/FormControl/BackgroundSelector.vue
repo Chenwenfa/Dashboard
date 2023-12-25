@@ -18,6 +18,28 @@
       </div>
     </div>
   </div>
+  <div v-if="showGlassOption && [1,2].includes(mode)" class="glass-wrapper">
+    <div class="form-row-control">
+      <div class="label">{{$t('毛玻璃效果')}}</div>
+      <div class="content">
+        <el-switch :model-value="!!backdropFilter" @change="onSwitchBackdroupFilter"></el-switch>
+        <Tips :content="$t('glassTips')"></Tips>
+      </div>
+    </div>
+    <div v-if="!!backdropFilter" class="form-row-control">
+      <div class="label">{{$t('模糊值')}}</div>
+      <div class="content">
+        <el-input-number
+          :model-value="glassBlur"
+          :min="0"
+          :max="50"
+          controls-position="right"
+          style="width: 100px"
+          @change="onChangeGlassBlur"
+        />
+      </div>
+    </div>
+  </div>
   <div class="online-img-wrapper" v-if="mode === 3">
     <div class="form-row-control">
       <div class="label">URL</div>
@@ -26,6 +48,7 @@
           <el-input
             v-model="bgImg"
             type="textarea"
+            style="width: 100%"
             :autosize="{ minRows: 2, maxRows: 8 }"
             :placeholder="isFullScreen ? $t('输入图片或动态壁纸URL') : $t('输入图片URL')"
             @change="handleBackgroundChange"
@@ -54,7 +77,11 @@
             v-if="isFullScreen"
             label="personal"
             :disabled="!wallpaperCollectionList || wallpaperCollectionList.length < 2"
-            class="row-radio">{{$t('个人壁纸库')}}</el-radio>
+            class="row-radio"
+            style="margin-bottom: 16px;">
+            <span style="margin-right: 24px;">{{$t('个人壁纸库')}}</span>
+            <PersonalWallpaper />
+          </el-radio>
         </el-radio-group>
       </div>
     </div>
@@ -80,14 +107,6 @@
         <label class="label">{{$t('国内镜像')}}</label>
         <div class="content">
           <el-switch v-model="mirror" @change="handleBackgroundChange"></el-switch>
-        </div>
-      </div>
-    </template>
-    <template v-if="randomSource === 'personal'">
-      <div class="form-row-control">
-        <label class="label"></label>
-        <div class="content">
-          <PersonalWallpaper />
         </div>
       </div>
     </template>
@@ -149,14 +168,17 @@ import StandardColorPicker from '@/components/FormControl/StandardColorPicker.vu
 import Tips from '@/components/Tools/Tips.vue'
 import { useStore } from '@/store'
 import { isSupportIndexDB } from '@/plugins/local-img'
+import RecommendVideo from './BackgroundTool/RecommendVideo.vue'
+import RecommendPicture from './BackgroundTool/RecommendPicture.vue'
+import PersonalWallpaper from './BackgroundTool/PersonalWallpaper.vue'
 export default defineComponent({
   name: 'BackgroundSelector',
   components: {
     StandardColorPicker,
     Tips,
-    RecommendVideo: defineAsyncComponent(() => import('./BackgroundTool/RecommendVideo.vue')),
-    RecommendPicture: defineAsyncComponent(() => import('./BackgroundTool/RecommendPicture.vue')),
-    PersonalWallpaper: defineAsyncComponent(() => import('./BackgroundTool/PersonalWallpaper.vue')),
+    RecommendVideo,
+    RecommendPicture,
+    PersonalWallpaper,
     LocalImg: defineAsyncComponent(() => import('./BackgroundTool/LocalImg.vue'))
   },
   props: {
@@ -187,6 +209,15 @@ export default defineComponent({
     recommendPicture: {
       type: Boolean,
       default: true
+    },
+    // 是否展示毛玻璃选项
+    showGlassOption: {
+      type: Boolean,
+      default: false
+    },
+    backdropFilter: {
+      type: String,
+      default: ''
     }
   },
   setup(props, { emit }) {
@@ -197,7 +228,9 @@ export default defineComponent({
     const imgType = ref('Nature')
     const customImgType = ref('')
     const mirror = ref(true)
-    const duration = ref(0)
+    const duration = ref(120)
+
+    const glassBlur = ref(10)
 
     watch(
       () => props.background,
@@ -233,7 +266,7 @@ export default defineComponent({
               mirror.value = url.includes('mirror')
               randomSource.value = 'unsplash'
             }
-            duration.value = ~~(_url.searchParams.get('duration') || 0)
+            duration.value = ~~(_url.searchParams.get('duration') || 120)
             mode.value = 4
           } else if (url.includes('localhost/localImg')) {
             const _url = new URL(url)
@@ -327,6 +360,31 @@ export default defineComponent({
 
     const wallpaperCollectionList = computed(() => store.wallpaperCollectionList)
 
+    watch(() => props.backdropFilter, (val) => {
+      if (val) {
+        const regExp = /backdrop-filter:\s{0,}blur\((\d+)px\)/;
+        const matchArr = val.match(regExp);
+        if (matchArr) {
+          const num = matchArr[1];
+          glassBlur.value = Number(num)
+        }
+      }
+    })
+
+    const onSwitchBackdroupFilter = (val: boolean) => {
+      if (val) {
+        if (!glassBlur.value) glassBlur.value = 10
+        emit('update:backdropFilter', `blur(${glassBlur.value}px)`)
+      } else {
+        emit('update:backdropFilter', '')
+      }
+    }
+
+    const onChangeGlassBlur = (val: number) => {
+      glassBlur.value = val
+      emit('update:backdropFilter', `blur(${glassBlur.value}px)`)
+    }
+
     return {
       mode,
       bgImg,
@@ -342,7 +400,10 @@ export default defineComponent({
       handleRecommendSelect,
       showRefreshBtn,
       store,
-      isSupportIndexDB
+      isSupportIndexDB,
+      glassBlur,
+      onSwitchBackdroupFilter,
+      onChangeGlassBlur
     }
   }
 })
@@ -361,12 +422,16 @@ export default defineComponent({
 }
 :deep(.el-radio) {
   margin-bottom: 5px;
-  margin-right: 24px;
+  margin-right: 20px;
 }
 .row-radio {
   display: block;
   height: 32px;
   line-height: 32px;
   margin-bottom: 0;
+}
+.glass-wrapper,
+.color-wrapper {
+  width: 100%;
 }
 </style>

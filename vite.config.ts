@@ -2,13 +2,17 @@ import { defineConfig } from 'vite'
 import { resolve } from 'path'
 import Vue from '@vitejs/plugin-vue'
 import VueJSX from '@vitejs/plugin-vue-jsx'
-import Markdown from 'vite-plugin-md'
-import vueI18n from '@intlify/vite-plugin-vue-i18n'
-import { visualizer } from 'rollup-plugin-visualizer'
+import VueMarkdown from 'vite-plugin-md'
+import VueI18n from '@intlify/unplugin-vue-i18n/vite'
+// import { visualizer } from 'rollup-plugin-visualizer'
+
+let base = '/'
+if (process.env.VITE_APP_BUILD_MODE === 'crx') base = './'
+if (process.env.VITE_APP_BUILD_MODE === 'cdn') base = 'https://cdn.kongfandong.cn/howdz/dist/'
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  base: process.env.VITE_APP_BUILD_MODE === 'crx' ? './' : '/Dashboard/',
+  base,
   resolve: {
     alias: {
       '@': resolve(__dirname, 'src'),
@@ -34,20 +38,16 @@ export default defineConfig({
       scss: {
         charset: false,
         additionalData: '@use "@/assets/element-variables" as *;'
+        // additionalData: "@import '@/assets/variables.scss';"
       }
     }
   },
   plugins: [
-    // viteCommonjs(),
-    Vue({
-      include: [/\.vue$/, /\.md$/]
-    }),
+    Vue({ include: [/\.vue$/, /\.md$/] }),
     VueJSX(),
-    Markdown(),
-    vueI18n({
-      include: resolve(__dirname, 'src/lang/**')
-    }),
-    visualizer()
+    VueMarkdown(),
+    VueI18n({ include: resolve(__dirname, 'src/lang/locales/**') })
+    // visualizer()
   ],
   build: {
     outDir: process.env.VITE_APP_BUILD_MODE === 'crx' ? 'crx' : 'dist'

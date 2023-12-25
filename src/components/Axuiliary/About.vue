@@ -4,7 +4,6 @@
       <p class="title">{{$t('项目说明')}}</p>
       <ul class="list">
         <li>项目提供<code>网页在线版</code>具体参考<a :href="INTRODUCTION" target="_blank">中文文档</a></li>
-        <li v-if="isWebify">Powered by <a href="https://webify.cloudbase.net/" target="_blank" rel="noopener noreferrer">CloudBase Webify</a></li>
       </ul>
     </div>
     <div class="item">
@@ -25,12 +24,12 @@ const AUTHOR_BLOG = 'https://kongfandong.cn'
 const GITHUB = 'https://github.com/leon-kfd/Dashboard'
 const ISSUE = 'https://github.com/leon-kfd/Dashboard/issues'
 const VIDEO = 'https://www.bilibili.com/video/BV1Vu411Z7i1?share_source=copy_web'
-const INTRODUCTION = 'https://kongfandong.cn/howdz/'
-const isWebify = location?.host === 's.kongfandong.cn'
+const INTRODUCTION = 'https://doc.howdz.xyz'
 </script>
 <style lang="scss" scoped>
 .wrapper {
   padding: 10px;
+  padding-right: 20px;
   .item {
     margin-bottom: 20px;
   }
@@ -79,7 +78,7 @@ const isWebify = location?.host === 's.kongfandong.cn'
         margin: 0 2px;
         font-size: 13px;
         font-weight: bold;
-        font-family: auto;
+        font-family: inherit;
       }
       a {
         color: $color-primary;

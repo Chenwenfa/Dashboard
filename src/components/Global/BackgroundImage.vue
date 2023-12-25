@@ -47,14 +47,19 @@
           />
         </div>
         <div class="icon-item" :title="$t('喜欢')">
-          <Icon
+          <svg
             v-if="showRefreshBtn && backgroundURL.includes('randomPhoto')"
-            :name="hasLike ? 'heart-fill': 'heart'"
+            xmlns='http://www.w3.org/2000/svg'
+            viewBox="0 0 24 24"
+            width="20"
+            height="20"
             :class="['btn-heart', hasLike && 'active']"
             :title="$t('喜欢')"
-            size="22"
             @click="like"
-          />
+          >
+            <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z" />
+            <path d="M16.5 3C19.538 3 22 5.5 22 9c0 7-7.5 11-10 12.5C9.5 20 2 16 2 9c0-3.5 2.5-6 5.5-6C9.36 3 11 4 12 5c1-1 2.64-2 4.5-2z" />
+          </svg>
         </div>
       </div>
     </div>
@@ -64,7 +69,6 @@
 <script lang="ts" setup>
 import { computed, ref, watch } from 'vue'
 import { useStore } from '@/store'
-import { getFileType } from '@/utils'
 import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
 import Icon from '../Tools/Icon.vue'
@@ -114,6 +118,8 @@ watch(
           duration < 30 ? 30 * 1000 : duration * 1000
         )
       }
+    } else {
+      if (timer) clearInterval(timer)
     }
   },
   {
@@ -182,14 +188,7 @@ watch(
 const videoURL = computed(() => {
   if (props.background && props.background.includes('url')) {
     const url = getURL(props.background)
-    // const fileType = getFileType(url)
-    // if (
-    //   fileType &&
-    //   ['mp4', 'avi', 'wmv', 'mpg', 'mpeg', 'mov', 'ts', 'flv', 'webm'].includes(fileType)
-    // ) {
-    //   return url
-    // }
-    if (['.mp4', '.webm', '.flv', '.avi'].some(item => url.includes(item))) {
+    if (['.mp4', '.webm', '.flv', '.avi', 'video'].some(item => url.includes(item))) {
       return url
     }
   }
@@ -361,8 +360,26 @@ defineExpose({
     align-items: center;
     margin: 0 4px;
     .btn-heart {
+      path {
+        stroke: currentColor;
+        stroke-width: 2px;
+        fill: transparent;
+      }
+      path:nth-child(2) {
+        transform-origin: center;
+        fill: transparent;
+        transform: scale(0);
+        transition: all .4s ease-in-out;
+      }
       &.active {
         color: $color-danger;
+        path:nth-child(1) {
+          fill: transparent;
+        }
+        path:nth-child(2) {
+          fill: currentColor;
+          transform: scale(1);
+        }
       }
     }
     &:hover {

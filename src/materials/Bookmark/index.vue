@@ -22,7 +22,7 @@
               disabled: () => isInBatch,
               params: { element, index },
               menuList,
-              width: 120,
+              width: 160,
               iconType: 'vnode-icon'
             }"
             :class="['item']"
@@ -48,8 +48,8 @@
                 :width="(iconSize || '32').replace('px', '')"
                 :height="(iconSize || '32').replace('px', '')"
               >
-                  <path d="M853.333333 256H469.333333l-85.333333-85.333333H170.666667c-46.933333 0-85.333333 38.4-85.333334 85.333333v170.666667h853.333334v-85.333334c0-46.933333-38.4-85.333333-85.333334-85.333333z" fill="#FFA000"></path>
-                  <path d="M853.333333 256H170.666667c-46.933333 0-85.333333 38.4-85.333334 85.333333v426.666667c0 46.933333 38.4 85.333333 85.333334 85.333333h682.666666c46.933333 0 85.333333-38.4 85.333334-85.333333V341.333333c0-46.933333-38.4-85.333333-85.333334-85.333333z" fill="#FFCA28"></path>
+                  <path d="M853.333333 256H469.333333l-85.333333-85.333333H170.666667c-46.933333 0-85.333333 38.4-85.333334 85.333333v170.666667h853.333334v-85.333334c0-46.933333-38.4-85.333333-85.333334-85.333333z" fill="#FFD766"></path>
+                  <path d="M853.333333 256H170.666667c-46.933333 0-85.333333 38.4-85.333334 85.333333v426.666667c0 46.933333 38.4 85.333333 85.333334 85.333333h682.666666c46.933333 0 85.333333-38.4 85.333334-85.333333V341.333333c0-46.933333-38.4-85.333333-85.333334-85.333333z" fill="#FFAC33"></path>
               </svg>
             </div>
             <div class="tile-title">{{ element.title }}</div>
@@ -102,7 +102,7 @@
               v-mouse-menu="{
                 params: { element, index, parent: folderOpener },
                 menuList,
-                width: 120,
+                width: 160,
                 iconType: 'vnode-icon'
               }"
               :class="['item']"
@@ -201,6 +201,7 @@
         </div>
       </div>
     </div>
+    <IframeOpener ref="iframeOpener" />
   </div>
 </template>
 
@@ -212,11 +213,12 @@ import ConfigDialog from './ConfigDialog.vue'
 import MoveDialog from './MoveDialog.vue'
 import ActionPopover from '@/components/Action/ActionPopover.vue'
 import Icon from '@/components/Tools/Icon.vue'
+import IframeOpener from '@/components/Global/IframeOpener.vue'
 import MouseMenuDirective from '@/plugins/mouse-menu'
 import { ElNotification } from 'element-plus'
 import { uid } from '@/utils'
 import { useI18n } from 'vue-i18n'
-import type { MenuSetting } from '@howdyjs/mouse-menu/dist/types'
+import type { MenuSetting } from '@howdyjs/mouse-menu'
 const props = defineProps({
   componentSetting: {
     type: Object,
@@ -239,6 +241,7 @@ const vMouseMenu = {
 const { t } = useI18n()
 
 const configDialog = ref()
+const iframeOpener = ref()
 
 const isLock = computed(() => store.isLock)
 const boxSize = computed(() => props.componentSetting.boxSize + 'px')
@@ -273,6 +276,30 @@ const list = computed({
 })
 
 const menuList = ref<MenuSetting[]>([
+  {
+    label: (params: any) => params.element.title,
+    customClass: 'title'
+  },
+  {
+    label: () => t('新标签页打开'),
+    customClass: 'skip-icon',
+    fn: (params: any) => {
+      window.open(params.element.url)
+    },
+    hidden: (params: any) => params.element.type === 'folder'
+  },
+  {
+    label: () => t('IFrame窗口打开'),
+    customClass: 'skip-icon',
+    fn: (params: any) => {
+      iframeOpener.value.open(params.element.url)
+    },
+    hidden: (params: any) => params.element.type === 'folder'
+  },
+  {
+    line: true,
+    hidden: (params: any) => params.element.type === 'folder'
+  },
   {
     label: () => t('添加'),
     icon: h(Icon, { name: 'add', size: 18 }) as any,
@@ -407,7 +434,9 @@ const jump = (element: Bookmark, $event?: any) => {
       if (!/https?:\/\/[-A-Za-z0-9+&@#/%?=~_|!:,.;]+[-A-Za-z0-9+&@#/%=~_|]/.test(target)) {
         target = 'https://' + target
       }
-      if (props.componentSetting.jumpType === 2) {
+      if (props.componentSetting.jumpType === 3) {
+        iframeOpener.value.open(target, $event.currentTarget)
+      } else if (props.componentSetting.jumpType === 2) {
         window.location.href = target
       } else {
         window.open(target)
@@ -590,7 +619,7 @@ onUnmounted(() => document.removeEventListener('contextmenu', preventMouseMenu))
       color: #fff;
     }
     &:hover {
-      background: rgba($color-dark, 0.42);
+      background: rgba(0,0,0,0.1);
       .delete-btn,
       .edit-btn {
         display: flex;
@@ -617,6 +646,7 @@ onUnmounted(() => document.removeEventListener('contextmenu', preventMouseMenu))
       }
       .no-icon {
         font-weight: bold;
+        padding-bottom: 1px;
       }
     }
     .tile-title {
@@ -642,7 +672,7 @@ onUnmounted(() => document.removeEventListener('contextmenu', preventMouseMenu))
   }
 }
 .popover-wrapper {
-  background: rgba(#242428, 0.98);
+  background: rgba(#242428, 0.9);
   width: 100%;
   height: 100%;
   padding: 10px;

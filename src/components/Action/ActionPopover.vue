@@ -1,16 +1,16 @@
 <template>
   <teleport to="body">
-    <transition name="zoomIn">
+    <transition name="zoomIn" :css="!isLowPreformance">
       <div
         v-if="visible"
         ref="actionPopover"
         class="action-popover"
         :class="popoverCustomClass"
         :style="{
-          width: rectInfo.width + 'px',
-          height: rectInfo.height + 'px',
-          top: rectInfo.top + 'px',
-          left: rectInfo.left + 'px',
+          width: `min(${rectInfo.width}px, 90vw)`,
+          height: `min(${rectInfo.height}px, 90vh)`,
+          top: `${rectInfo.top}px`,
+          left: `${rectInfo.left}px`,
           transformOrigin: transformOriginStr,
           zIndex: zIndex
         }">
@@ -23,8 +23,9 @@
   </teleport>
 </template>
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted, watch } from 'vue'
+import { ref, onMounted, onUnmounted, watch, computed } from 'vue'
 import { getPopoverActivePointByDirection } from '@/utils/direction'
+import { useStore } from '@/store'
 const props = defineProps({
   popoverCustomClass: {
     type: String
@@ -38,11 +39,14 @@ const props = defineProps({
     default: 2001
   },
 })
-const emit = defineEmits(['opend', 'closed'])
+const emit = defineEmits(['opened', 'closed', 'startClose'])
 
 const visible = ref(false)
 const isCenterDirection = ref(false)
 const transformOriginStr = ref('')
+
+const store = useStore()
+const isLowPreformance = computed(() => store.global.disabledDialogAnimation)
 
 // clickOutside
 const actionPopover = ref()
@@ -107,6 +111,7 @@ const close = () => {
   if (isCenterDirection.value) {
     window.removeEventListener('resize', resetPosition, true)
   }
+  emit('startClose')
   visible.value = false
   isCenterDirection.value = false
 }
@@ -118,7 +123,7 @@ const toggle = (component: ComponentOptions, element: HTMLElement) => {
   }
 }
 
-const defaultOpen = ({ w, h, direction }: any, element: HTMLElement) => {
+const defaultOpen = ({ w, h, direction }: any, element?: HTMLElement) => {
   setTimeout(() => {
     const [endX, endY, fromX, fromY] = getPopoverActivePointByDirection(element, {
       width: w || 200,
@@ -133,14 +138,17 @@ const defaultOpen = ({ w, h, direction }: any, element: HTMLElement) => {
     transformOriginStr.value = `${fromX - endX}px ${fromY - endY}px`
     visible.value = true
     isCenterDirection.value = direction === 0
+    if (isCenterDirection.value) {
+      window.addEventListener('resize', resetPosition, true)
+    }
   })
 }
 
 watch(() => visible.value, (val) => {
   if (val) {
-    emit('opend')
+    setTimeout(() => emit('opened'), 400)
   } else {
-    emit('closed')
+    setTimeout(() => emit('closed'), 400)
   }
 })
 

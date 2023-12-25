@@ -13,7 +13,7 @@
     <img
       class="bg"
       ref="movieBg"
-      v-if="componentSetting.showPoster"
+      v-if="componentSetting.showPoster && !componentSetting.asBackground"
       v-show="isReady"
       :src="componentSetting.posterType === 2 ? wallpaperImg: img"
       :style="{ filter: componentSetting.posterFilter }"
@@ -54,6 +54,7 @@ import { mapPosition } from '@/plugins/position-selector'
 import { execCopy } from '@/utils'
 import { ElNotification } from 'element-plus'
 import { useI18n } from 'vue-i18n'
+import { useStore } from '@/store'
 const props = defineProps({
   componentSetting: {
     type: Object,
@@ -66,6 +67,7 @@ const props = defineProps({
 })
 
 const { t } = useI18n()
+const store = useStore()
 
 const linesText = ref()
 const movieText = ref()
@@ -98,6 +100,11 @@ const getData = async () => {
     } else {
       wallpaperImg.value = randomImg
     }
+
+    if (props.componentSetting.asBackground) {
+      store.updateState({ key: 'realBackgroundURL', value: wallpaperImg.value })
+    }
+
     link.value = _link
 
     bgEffectString.value = `
@@ -121,8 +128,67 @@ const refreshTimer = () => {
   timer = window.setInterval(getData, refreshDuration)
 }
 watch(() => props.componentSetting.duration, () => refreshTimer(), { immediate: true })
-onMounted(() => getData())
-onUnmounted(() => timer && window.clearInterval(timer))
+watch(() => props.componentSetting.asBackground, (val) => {
+  if (val && store.realBackgroundURL !== wallpaperImg.value) {
+    store.resetGlobalBackground()
+    store.updateGlobalKey({ key: 'backgroundFilter', value: props.componentSetting.posterFilter })
+    store.updateState({ key: 'realBackgroundURL', value: wallpaperImg.value })
+  }
+}, { immediate: true })
+watch(() => props.componentSetting.posterFilter, (val) => {
+  if (val && store.global.backgroundFilter !== val) {
+    store.updateGlobalKey({ key: 'backgroundFilter', value: props.componentSetting.posterFilter })
+  }
+})
+
+
+onMounted(() => {
+  getData()
+
+  // const addMovieLineLoadingObserve = () => {
+  //   const runAnimation = () => {
+  //     const checkEl = document.querySelector('body .light__line')
+  //     if (checkEl) checkEl.remove()
+  //     const lightLine = document.createElement('div')
+  //     lightLine.setAttribute('class', 'light__line')
+  //     lightLine.style.cssText = `
+  //       position: absolute;
+  //       bottom: 2px;
+  //       left: 0;
+  //       right: 0;
+  //       width: 0;
+  //       height: 4px;
+  //       border-radius: 2px;
+  //       background: #0093df;
+  //       border-bottom: 2px solid #0093df;
+  //       box-shadow: 0 0 30px #0093df;
+  //       transition: width 120s;
+  //     `
+  //     document.body?.appendChild(lightLine)
+  //     setTimeout(() => {
+  //       lightLine.style.width = `100%`;
+  //     }, 200)
+  //   }
+  //   const obs = new MutationObserver(() => {
+  //     runAnimation()
+  //   })
+  //   const blockquoteEl = document.querySelector('.material-movielines .blockquote')
+  //   if (blockquoteEl) {
+  //     obs.observe(blockquoteEl, { childList: true, characterData: true, subtree: true})
+  //     runAnimation()
+  //   }
+  // }
+  // setTimeout(() => {
+  //   addMovieLineLoadingObserve()
+  // }, 300)
+})
+
+onUnmounted(() => {
+  if (props.componentSetting.asBackground) {
+    store.updateState({ key: 'realBackgroundURL', value: '' })
+  }
+  timer && window.clearInterval(timer)
+})
 
 const positionCSS = computed(() => mapPosition(props.componentSetting.position))
 const themeColor = computed(() => props.componentSetting.themeColor)
@@ -145,6 +211,7 @@ const imgLoad = () => {
 }
 
 const handleClickAction = () => {
+  if (!store.isLock) return
   if (props.componentSetting.clickActionType === 1) {
     getData()
     refreshTimer()

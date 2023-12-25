@@ -77,6 +77,7 @@
               v-model="state.formData.siteTitle"
               :placeholder="$t('自定义网站的标题')"
               clearable
+              style="width: 214px"
             ></el-input>
             <Tips :content="$t('siteTitleTips')" />
           </div>
@@ -124,18 +125,23 @@
 
 <script lang="ts">
 import { defineComponent, ref, watch, reactive, defineAsyncComponent } from 'vue'
-import BackgroundSelector from '@/components/FormControl/BackgroundSelector.vue'
-import BackgroundFilterSelector from '@/components/FormControl/BackgroundFilterSelector.vue'
 import WarnLock from '@/components/FormControl/WarnLock.vue'
 import Tips from '@/components/Tools/Tips.vue'
+import TextLoading from '@/components/Tools/TextLoading.vue'
 import { useStore } from '@/store'
 import { langList } from '@/lang'
 import { useI18n } from 'vue-i18n'
 export default defineComponent({
   name: 'GlobalConfig',
   components: {
-    BackgroundSelector,
-    BackgroundFilterSelector,
+    BackgroundSelector: defineAsyncComponent({
+      loader: () => import('@/components/FormControl/BackgroundSelector.vue'),
+      loadingComponent: TextLoading
+    }),
+    BackgroundFilterSelector: defineAsyncComponent({
+      loader: () => import('@/components/FormControl/BackgroundFilterSelector.vue'),
+      // loadingComponent: TextLoading
+    }),
     WarnLock,
     Tips,
     FontSelector: defineAsyncComponent(() => import('@/components/FormControl/FontSelector.vue'))
@@ -221,8 +227,12 @@ export default defineComponent({
 
     watch(
       () => store.global.globalFontFamily,
-      (val) => {
-        document.body.style.fontFamily = val === 'HarmonyOS_Regular' ? 'HarmonyOS_Regular' : 'Helvetica Neue, Microsoft YaHei, Arial, sans-serif'
+      () => {
+        const defaultFontList = ['Helvetica Neue, Microsoft YaHei, Arial, sans-serif']
+        if (store.global.globalFontFamily) {
+          defaultFontList.unshift(store.global.globalFontFamily)
+        }
+        document.body.style.fontFamily = defaultFontList.join(',')
       },
       {
         immediate: true

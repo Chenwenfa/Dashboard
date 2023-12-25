@@ -45,9 +45,10 @@
       "boxShadow": "",
       "i": "eeqe1jiqi1g",
       "componentSetting": {
+        "source": 1,
         "duration": 5,
         "position": 5,
-        "textFontSize": 24,
+        "textFontSize": 14,
         "textColor": "#FFFFFF",
         "textShadow": "0 1px 4px #484848",
         "fontFamily": "",
@@ -283,7 +284,7 @@
       "componentSetting": {
         "weatherMode": 1,
         "cityName": "",
-        "duration": 15,
+        "duration": 120,
         "position": 5,
         "baseFontSize": 16,
         "textColor": "#FFFFFF",
@@ -296,7 +297,7 @@
     }
   ],
   "global": {
-    "background": "#CBCFF3 url(https://fastly.jsdelivr.net/gh/dsource/static/assets/10-test.webm) center center / cover",
+    "background": "#CBCFF3 url(https://cdn.kongfandong.cn/Rain.webm) center center / cover",
     "backgroundFilter": "brightness(0.65)",
     "lang": "zh-cn",
     "gutter": 10,

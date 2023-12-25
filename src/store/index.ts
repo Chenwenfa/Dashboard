@@ -52,7 +52,7 @@ export const useStore = defineStore({
         showMenuBtn: true,
         ...getLocalGlobal()
       } as GlobalOptions,
-      fontFamilyList: [] as any[],
+      fontFamilyList: [] as IFontData[],
       tabList: [] as any[],
       actionElement: null as ComponentOptions | null,
       showBackgroundEffect: false,
@@ -87,14 +87,18 @@ export const useStore = defineStore({
     updateAffix(value: ComponentOptions[]) {
       this.affix = value
     },
-    updateFontFamilyList() {
-      this.fontFamilyList = getSupportFontFamilyList()
+    async updateFontFamilyList() {
+      this.fontFamilyList = await getSupportFontFamilyList()
     },
     updateActionElement(value: ComponentOptions) {
       this.actionElement = value
     },
     updateGlobal(value: GlobalOptions) {
       this.global = value
+      updateLocalGlobal(this.global)
+    },
+    updateGlobalKey({ key, value }: { key: string; value: any; }) {
+      this.global[key] = value
       updateLocalGlobal(this.global)
     },
     resetGlobalBackground() {
@@ -145,11 +149,11 @@ export const useStore = defineStore({
         const _tabList = JSON.parse(JSON.stringify(this.tabList))
         const index = this.tabList.findIndex((item: any) => item.id === id)
         if (~index) {
-          const { list, affix, global, showBackgroundEffect, showRefreshBtn } = this
-          const { list: list1, affix: affix1, global: global1, showBackgroundEffect: showBackgroundEffect1, showRefreshBtn: showRefreshBtn1 } = _tabList[index].data
+          const { list, affix, global, showBackgroundEffect, showRefreshBtn, backgroundEffectActive } = this
+          const { list: list1, affix: affix1, global: global1, showBackgroundEffect: showBackgroundEffect1, showRefreshBtn: showRefreshBtn1, backgroundEffectActive: backgroundEffectActive1 } = _tabList[index].data
           const current = _tabList.find((item: any) => !!item.selected)
           current.selected = false
-          current.data = JSON.parse(JSON.stringify({ list, affix, global, showBackgroundEffect, showRefreshBtn }))
+          current.data = JSON.parse(JSON.stringify({ list, affix, global, showBackgroundEffect, showRefreshBtn, backgroundEffectActive }))
           _tabList[index].selected = true
           _tabList[index].data = null
           global1.lang = this.global.lang
@@ -159,6 +163,7 @@ export const useStore = defineStore({
           this.updateGlobal(global1)
           this.showBackgroundEffect = showBackgroundEffect1
           this.showRefreshBtn = showRefreshBtn1
+          this.backgroundEffectActive = backgroundEffectActive1
         }
       } catch (e) {
         console.error(e)

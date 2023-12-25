@@ -15,7 +15,14 @@
       :style="[item.tips && 'padding-right: 30px', item.formItemStyle]"
     >
       <template v-if="typeLimit.includes(item.type)">
+        <el-date-picker
+          v-if="item.type === 'date-picker'"
+          v-bind="{ ...item.attrs }"
+          v-on="{ ...item.events }"
+          v-model="formData[key]"
+        />
         <component
+          v-else
           :is="`el-${item.type}`"
           :clearable="['input'].includes(item.type)"
           v-bind="{ ...item.attrs }"
@@ -66,6 +73,9 @@
       <template v-if="item.slot">
         <slot v-if="!isFn(item.slot)" :name="item.slot"></slot>
         <jsx-render v-if="typeof item.slot === 'function'" :render="item.slot"></jsx-render>
+      </template>
+      <template v-if="item.unit">
+        <span class="unit">{{ item.unit }}</span>
       </template>
       <template v-if="item.tips">
         <el-tooltip
@@ -162,6 +172,11 @@ export default defineComponent({
 .form-item-control {
   position: relative;
 }
+.unit {
+  font-weight: bold;
+  font-size: 12px;
+  margin-left: 8px;
+}
 :deep(.form-item-tips) {
   position: absolute;
   top: 0;
@@ -176,5 +191,13 @@ export default defineComponent({
 :deep(.block-radio-group .el-radio) {
   line-height: 30px;
   display: block;
+}
+:deep(.font-selector.wrapper) {
+  .el-select {
+    width: calc(100% - 30px);
+  }
+  .icon-refresh {
+    margin-left: 4px;
+  }
 }
 </style>

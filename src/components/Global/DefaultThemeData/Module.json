@@ -46,6 +46,7 @@
       "zIndex": 10,
       "i": "11b4k80drmg",
       "componentSetting": {
+        "source": 1,
         "duration": 5,
         "position": 5,
         "textFontSize": 32,
@@ -278,7 +279,7 @@
       "componentSetting": {
         "weatherMode": 1,
         "cityName": "",
-        "duration": 15,
+        "duration": 120,
         "position": 5,
         "baseFontSize": 22,
         "textColor": "#FFFFFF",

@@ -1,5 +1,5 @@
 <template>
-  <div class="wrapper">
+  <div class="wrapper font-selector">
     <el-select
       :placeholder="$t('请选择相关字体库')"
       clearable
@@ -7,6 +7,7 @@
       allow-create
       default-first-option
       v-bind="$attrs"
+      @focus="checkToQueryFont"
     >
       <el-option
         v-for="item in fontList"
@@ -42,10 +43,17 @@ const props = defineProps({
 })
 const store = useStore()
 onMounted(() => {
+  // if (!store.fontFamilyList || store.fontFamilyList.length === 0) {
+  //   store.updateFontFamilyList()
+  // }
+})
+
+const checkToQueryFont = () => {
   if (!store.fontFamilyList || store.fontFamilyList.length === 0) {
     store.updateFontFamilyList()
   }
-})
+}
+
 const fontList = computed(() => {
   const outerFont = []
   if (props.showHarmonyFont || store.global.loadHarmonyOSFont) {
@@ -67,8 +75,9 @@ const refresh = () => {
 </script>
 <style lang="scss" scoped>
 .wrapper {
-  display: inline-flex;
+  display: flex;
   align-items: center;
+  width: 100%;
   .icon-refresh {
     display: inline-flex;
     align-items: center;

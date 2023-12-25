@@ -113,6 +113,8 @@
                 :w="state.formData.w"
                 :h="state.formData.h"
                 :positionMode="state.formData.position"
+                showGlassOption
+                v-model:backdropFilter="state.formData.backdropFilter"
               />
               <BackgroundFilterSelector
                 v-if="state.formData.background.includes('url')"
@@ -182,7 +184,7 @@
             :formData="state.formData.componentSetting"
             :formConf="state.componentFormConf"
             ref="form"
-            label-width="100px"
+            label-width="120px"
           ></StandardForm>
         </div>
       </div>
@@ -197,13 +199,12 @@
 </template>
 
 <script lang="ts">
-import { computed, defineComponent, reactive, ref, watch } from 'vue'
+import { computed, defineAsyncComponent, defineComponent, reactive, ref, watch } from 'vue'
 import MaterialSelector from '@/components/FormControl/MaterialSelector.vue'
-import BackgroundSelector from '@/components/FormControl/BackgroundSelector.vue'
-import BackgroundFilterSelector from '@/components/FormControl/BackgroundFilterSelector.vue'
 import WarnLock from '@/components/FormControl/WarnLock.vue'
 import PositionSelector from '@/plugins/position-selector'
 import Tips from '@/components/Tools/Tips.vue'
+import TextLoading from '@/components/Tools/TextLoading.vue'
 import { useStore } from '@/store'
 import { ElNotification } from 'element-plus'
 import { uid, clone } from '@/utils'
@@ -221,6 +222,7 @@ const DEFAULT_SETTING: ComponentOptions = {
   h: 2,
   background: 'transparent',
   backgroundFilter: 'brightness(0.8)',
+  backdropFilter: '',
   material: 'Empty',
   borderRadius: 4,
   boxShadow: '',
@@ -231,8 +233,14 @@ export default defineComponent({
   name: 'BaseConfig',
   components: {
     MaterialSelector,
-    BackgroundSelector,
-    BackgroundFilterSelector,
+    BackgroundSelector: defineAsyncComponent({
+      loader: () => import('@/components/FormControl/BackgroundSelector.vue'),
+      loadingComponent: TextLoading
+    }),
+    BackgroundFilterSelector: defineAsyncComponent({
+      loader: () => import('@/components/FormControl/BackgroundFilterSelector.vue'),
+      // loadingComponent: TextLoading
+    }),
     WarnLock,
     PositionSelector,
     Tips,

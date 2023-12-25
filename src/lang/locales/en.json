@@ -379,5 +379,21 @@
   "动画滤镜": "Animate Filter",
   "请前往辅助功能设置": "Turn to Auxiliary Config",
   "图标文案": "Custom Text",
-  "仅限一个字": "Limit one word"
+  "仅限一个字": "Limit one word",
+  "毛玻璃效果": "Glass effect",
+  "模糊值": "Blur",
+  "glassTips": "Takes effect only if the background contains transparency, based on the backdrop-filter attribute",
+  "个人壁纸库": "Personal collection",
+  "查看个人壁纸库": "View personal collection",
+  "操作按钮": "Operation Btn",
+
+  "iframeRefreshTips": "Refresh time of iframe, unit in minute, set 0 to not refresh",
+  "iframeCacheTips": "Will cache iframe dom when it is in the action popover",
+  "导入": "Import",
+  "导出": "Export",
+  "批量删除": "Batch Delete",
+
+  "来自书签": "From Bookmark",
+  "同时搜索书签": "Link Bookmark",
+  "开启后搜索的同时尝试对书签组件的数据进行搜索": "Enable to find bookmark link when searching"
 }

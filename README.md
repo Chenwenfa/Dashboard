@@ -1,4 +1,4 @@
-<p align="center"><a href="https://howdz.vercel.app"><img width="200px" src="./public/favicon.png"></a></p>
+<p align="center"><a href="https://doc.howdz.xyz/"><img width="200px" src="./public/favicon.png"></a></p>
 <p align="center"><b>Howdz</b></p>
 
 # Howdz Dashboard
@@ -13,7 +13,7 @@
 
 - [网页体验版](https://howdz.xyz/)
 - [网页体验版(备用)](https://s.kongfandong.cn/)
-- [获取 Chrome 插件](https://chrome.google.com/webstore/detail/howdz%E8%B5%B7%E5%A7%8B%E9%A1%B5/ggglfehkglgpenacfalffmiojghklamm/related)
+- [获取 Chrome 插件](https://chromewebstore.google.com/detail/howdz%E8%B5%B7%E5%A7%8B%E9%A1%B5/ggglfehkglgpenacfalffmiojghklamm)
 - [获取 Edge 插件](https://microsoftedge.microsoft.com/addons/detail/howdz%E8%B5%B7%E5%A7%8B%E9%A1%B5/cgcggcdgjfmeoemmdpleinicgepijegd)
 
 ## Feature
@@ -32,9 +32,26 @@
 
 ## Screenshot
 
-<p><a href="https://s.kongfandong.cn/"><img width="400px" src="https://s2.loli.net/2022/01/13/eNxSAqcDLMHuCVJ.png"></a></p>
-<p><a href="https://s.kongfandong.cn/"><img width="400px" src="https://s2.loli.net/2022/01/13/8EaLuqIxt3DYkM1.png"></a></p>
-<p><a href="https://s.kongfandong.cn/"><img width="400px" src="https://s2.loli.net/2022/01/13/CZe8gTiIVUlpvOt.png"></a></p>
+<p>
+  <a href="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot06.png" target="_blank">
+    <img width="400px" src="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot06.png?imageView2/2/w/400">
+  </a>
+</p>
+<p>
+  <a href="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot02.png" target="_blank">
+    <img width="400px" src="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot02.png?imageView2/2/w/400">
+  </a>
+</p>
+<p>
+  <a href="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot05.png" target="_blank">
+    <img width="400px" src="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot05.png?imageView2/2/w/400">
+  </a>
+</p>
+<p>
+  <a href="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot04.png" target="_blank">
+    <img width="400px" src="https://cdn.kongfandong.cn/howdz-screenshot/screen_shot04.png?imageView2/2/w/400">
+  </a>
+</p>
 
 ## Materials
 
