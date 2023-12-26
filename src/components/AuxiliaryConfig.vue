@@ -27,6 +27,10 @@ import Loading from '@/components/Tools/Loading.vue'
 export default defineComponent({
   name: 'AuxiliaryConfig',
   components: {
+    SaveRecover: defineAsyncComponent({
+      loader: () => import('@/components/Axuiliary/SaveRecover.vue'),
+      loadingComponent: Loading
+    }),
     FAQ: defineAsyncComponent({
       loader: () => import('@/components/Axuiliary/FAQ.vue'),
       loadingComponent: Loading
@@ -86,6 +90,10 @@ export default defineComponent({
       {
         label: '导入导出',
         cName: 'ImportExport'
+      },
+      {
+        label: '保存恢复',
+        cName: 'SaveRecover'
       },
       {
         label: '关于项目',

@@ -10,6 +10,12 @@ let base = '/'
 if (process.env.VITE_APP_BUILD_MODE === 'crx') base = './'
 if (process.env.VITE_APP_BUILD_MODE === 'cdn') base = 'https://cdn.kongfandong.cn/howdz/dist/'
 
+/** 跨域代理重写 */
+const regExps = (value: string, reg: string): string => {
+  return value.replace(new RegExp(`^${reg}`, "g"), "");
+};
+
+
 // https://vitejs.dev/config/
 export default defineConfig({
   base,
@@ -54,16 +60,23 @@ export default defineConfig({
   },
   server: {
     proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8002",
+        // target: "http://139.199.175.149/",
+        // ws: true,
+        rewrite: (path: string) => regExps(path, "/api"),
+        changeOrigin: true
+      },
       '/baidu-api': {
         target: 'https://suggestion.baidu.com/',
         changeOrigin: true,
         rewrite: (path: string) => path.replace(/^\/baidu-api/, '')
       },
-      '/api': {
-        target: 'https://kongfandong.cn',
-        changeOrigin: true,
-        rewrite: (path: string) => path.replace(/^\/api/, '')
-      }
+      // '/api': {
+      //   target: 'https://kongfandong.cn',
+      //   changeOrigin: true,
+      //   rewrite: (path: string) => path.replace(/^\/api/, '')
+      // }
     }
   }
 })

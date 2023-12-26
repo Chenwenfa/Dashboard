@@ -7,6 +7,11 @@
       <span class="hamburger hamburger-2"></span>
       <span class="hamburger hamburger-3"></span>
     </label>
+    <el-tooltip effect="dark" content="博客" placement="top">
+      <div class="menu-item" @click="handleToBlog">
+        <Icon name="blog" viewBox="0 0 1024 1024" />
+      </div>
+    </el-tooltip>
     <el-tooltip effect="dark" :content="$t('辅助功能') + `(Alt+X)`" placement="top">
       <div class="menu-item" @click="handleShowAuxiliaryConfig">
         <Icon name="tools" />
@@ -138,13 +143,16 @@ export default defineComponent({
       },
       handleShowAuxiliaryConfig() {
         emit('showAuxiliaryConfig')
+      },
+      handleToBlog() {
+        location.href = "http://www.fair2.top/Blog/#/home"
       }
     }
   }
 })
 </script>
 <style lang="scss" scoped>
-$menu-items: 4;
+$menu-items: 5;
 %goo {
   filter: url('#shadowed-goo');
 }
