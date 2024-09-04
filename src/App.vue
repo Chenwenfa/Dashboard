@@ -18,6 +18,9 @@
     <AuxiliaryConfig v-model:visible="axuiliaryConfigVisible" />
     <DefaultTheme v-if="needShowDefaultThemePicker" />
     <TabCarousel />
+    <div class="footer">
+      备案号:<a href="https://beian.miit.gov.cn/" target="_blank">粤ICP备2023135206号</a>
+    </div>
   </div>
 </template>
 <script lang="ts" setup>
@@ -156,5 +159,15 @@ onMounted(() => {
   width: 100%;
   min-height: 100%;
   position: relative;
+}
+.footer {
+  position: absolute;
+  left: 50%;
+  color: #ccc;
+  bottom: 10px;
+  transform: translateX(-50%);
+  a {
+    color: #ccc;
+  }
 }
 </style>
